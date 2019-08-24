@@ -37,9 +37,10 @@
 	<body>
 
 		<div id="app">
-            <p 
-                v-html="incendio(lumos(wizard))"
-            ></p>
+            <wizard :name="harry"   :cast="oculus_reparo"></wizard>
+            <wizard :name="ron"     :cast="wingardium_leviosa"></wizard>
+            <wizard :name="hermione" :cast="alohomora"></wizard>
+
 		</div>
 
 		<script>
@@ -52,26 +53,38 @@
             };
 
             const cast = (emoji) => {
+                var magic = emojify("magic");
+                return (wizard) => {
+		            return wizard + " " + magic + " " + emoji + " " + magic;
+	            }
+                /*
                 if (!emoji) {
                     emoji = "¯\\_(ツ)_/¯";
                 }
                 return (wizard) => {
                     return emoji + wizard + emoji;
                 }
+                */
             }
+
+            Vue.component("wizard", {
+                props: ["name", "cast"],
+                template: `<p v-html="cast(name)"></p>`
+            })
+
             var app = new Vue({
                 el: "#app",
                 data: {
-                    message: 'hello world!<br>second line',
-                    message2: "type here",
-                    wizard: emojify("wizard")
+                    harry: emojify("harry"),
+                    ron: emojify("ron"),
+                    hermione: emojify("hermione")
                 },
                 methods: {
-                    lumos: cast(emojify("lumos")),
-                    incendio: cast(emojify("incendio"))
+                    oculus_reparo: cast(emojify("oculus-reparo")),
+                    wingardium_leviosa: cast(emojify("wingardium-leviosa")),
+                    alohomora: cast(emojify("alohomora"))
                 }
             });
-
 		</script>
 
 	</body>
