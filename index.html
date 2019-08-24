@@ -37,20 +37,39 @@
 	<body>
 
 		<div id="app">
-			<p>hello, world!</p>
+            <p 
+                v-html="incendio(lumos(wizard))"
+            ></p>
 		</div>
 
 		<script>
             "use strict"
 
             // emojify returns the corresponding emoji image
-            function emojify(name) {
+            const emojify = (name) => {
                 var out = `<img src="emojis/` + name + `.png">`
                 return out
             };
 
+            const cast = (emoji) => {
+                if (!emoji) {
+                    emoji = "¯\\_(ツ)_/¯";
+                }
+                return (wizard) => {
+                    return emoji + wizard + emoji;
+                }
+            }
             var app = new Vue({
-                el: "#app"
+                el: "#app",
+                data: {
+                    message: 'hello world!<br>second line',
+                    message2: "type here",
+                    wizard: emojify("wizard")
+                },
+                methods: {
+                    lumos: cast(emojify("lumos")),
+                    incendio: cast(emojify("incendio"))
+                }
             });
 
 		</script>
