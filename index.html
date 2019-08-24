@@ -19,27 +19,32 @@
 
             #app {
                 display: flex;
-                flex-direction: column; justify-content: center; align-items: center;
+                justify-content: center; align-items: center;
                 width: 100vw; height: 100vh;
                 font-weight: 900; font-size: 8rem;
                 color: hsl(0, 0%, 100%);
                 background: hsl(240, 100%, 67%);
+                user-select: none;
             }
-
-            input { text-align: center; }
 
             img {
                 width: 8rem; height: 8rem;
                 vertical-align: calc(-0.12109375em);
             }
+            .breathe--man { animation: breathe 4.0s infinite; }
+            .breathe--dog { animation: breathe 0.5s infinite; }
+
+            @keyframes breathe {
+                0% { transform: scale(0.95); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(0.95); }
+            }
 		</style>
 	</head>
 	<body>
 
-		<div id="app">
-            <wizard :name="harry"   :cast="oculus_reparo"></wizard>
-            <wizard :name="ron"     :cast="wingardium_leviosa"></wizard>
-            <wizard :name="hermione" :cast="alohomora"></wizard>
+		<div id="app" :style="{background: background()}">
+            <p @click="animagus" v-html="active" :class="breathe()"></p>
 
 		</div>
 
@@ -57,14 +62,6 @@
                 return (wizard) => {
 		            return wizard + " " + magic + " " + emoji + " " + magic;
 	            }
-                /*
-                if (!emoji) {
-                    emoji = "¯\\_(ツ)_/¯";
-                }
-                return (wizard) => {
-                    return emoji + wizard + emoji;
-                }
-                */
             }
 
             Vue.component("wizard", {
@@ -75,14 +72,35 @@
             var app = new Vue({
                 el: "#app",
                 data: {
-                    harry: emojify("harry"),
-                    ron: emojify("ron"),
-                    hermione: emojify("hermione")
+                    active: emojify("sirius--man"),
+                    sirius: {
+                        man: emojify("sirius--man"),
+                        dog: emojify("sirius--dog")
+                    }
+
                 },
                 methods: {
-                    oculus_reparo: cast(emojify("oculus-reparo")),
-                    wingardium_leviosa: cast(emojify("wingardium-leviosa")),
-                    alohomora: cast(emojify("alohomora"))
+                    animagus: function () {
+                        this.active = (
+                            this.active == this.sirius.man ?
+                                this.sirius.dog :
+                                this.sirius.man
+                        )
+                    },
+                    breathe: function () {
+                        return (
+                            this.active == this.sirius.man ?
+                                "breathe--man" :
+                                "breathe--dog"
+                        )
+                    },
+                    background: function () {
+                        return (
+                            this.active == this.sirius.man ?
+                                "" :
+                                "black"
+                        )
+                    },
                 }
             });
 		</script>
